@@ -10,3 +10,4 @@ Cargo.lock.bk
 *.db
 *.db-journal
 *_dump.sql
+.cargo/config.toml
