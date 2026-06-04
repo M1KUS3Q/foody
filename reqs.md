@@ -33,6 +33,7 @@
 15. User can list all dayparts (`list`)
 16. User can assign one or more dayparts to a meal (`assign Pasta dessert,dinner`)
 17. User can unassign a daypart from a meal (`unassign Pasta dessert`)
+35. User can view a single daypart (name + which meals are assigned to it) 
 
 ### Meal Plan Management
 (`foody plan`)

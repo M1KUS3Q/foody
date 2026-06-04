@@ -8,7 +8,7 @@ impl MealRouter {
             MealAction::Add { name } => app.add_meal(name).await,
             MealAction::Remove { force, name } => app.remove_meal(name, *force).await,
             MealAction::View { name } => app.view_meal(name).await,
-            MealAction::List { filter } => app.list_meals(filter.as_deref()).await,
+            MealAction::List => app.list_meals().await,
             MealAction::Rename { name, new_name } => app.rename_meal(name, new_name).await,
         }
     }

@@ -1,15 +1,10 @@
 use crate::app::App;
-use cel::Program;
-use serde::Deserialize;
-use serde::Serialize;
-use sqlx::types::Json;
 
-#[derive(Serialize, Deserialize)]
 pub struct MealView {
     id: i64,
     name: String,
-    dayparts: Json<Vec<String>>,
-    ingredients: Json<Vec<String>>,
+    dayparts: Vec<String>,
+    ingredients: Vec<String>,
 }
 
 impl MealView {
@@ -22,35 +17,12 @@ impl MealView {
 
         if !self.ingredients.is_empty() {
             s.push_str("Ingredients:\n");
-            for ing in &self.ingredients.0 {
+            for ing in &self.ingredients {
                 s.push_str(&format!("- {}\n", ing));
             }
         }
 
         s
-    }
-}
-
-pub struct MealFilter {
-    filter: Program,
-}
-impl MealFilter {
-    pub fn parse(query: &str) -> anyhow::Result<Self> {
-        Ok(Self {
-            filter: Program::compile(query)?,
-        })
-    }
-
-    pub fn run(&self, meal: &MealView) -> anyhow::Result<bool> {
-        let mut ctx = cel::Context::default();
-        ctx.add_variable("id", meal.id)?;
-        ctx.add_variable("name", meal.name.clone())?;
-        ctx.add_variable("dayparts", meal.dayparts.clone())?;
-        ctx.add_variable("ingredients", meal.ingredients.clone())?;
-
-        let res = self.filter.execute(&ctx)?;
-
-        Ok(res == cel::Value::Bool(true))
     }
 }
 
@@ -124,43 +96,13 @@ WHERE m.name = ?;",
         Ok(())
     }
 
-    pub async fn list_meals(&self, filter: Option<&str>) -> anyhow::Result<()> {
-        match filter {
-            None | Some("") => self.list_meals_unfiltered().await,
-            Some(f) => self.list_meals_filtered(f).await,
-        }
-    }
-
-    async fn list_meals_unfiltered(&self) -> anyhow::Result<()> {
+    pub async fn list_meals(&self) -> anyhow::Result<()> {
         sqlx::query_scalar!("SELECT name FROM meals")
             .fetch_all(&self.pool)
             .await
             .map_err(anyhow::Error::from)?
             .iter()
             .for_each(|name| println!("{name}"));
-
-        Ok(())
-    }
-    async fn list_meals_filtered(&self, filter: &str) -> anyhow::Result<()> {
-        let meals = sqlx::query_as!(
-            MealView,
-            r#"SELECT 
-                m.id, 
-                m.name,
-                (SELECT json_group_array(d.name) FROM dayparts d JOIN meal_dayparts md ON md.daypart_id = d.id WHERE md.meal_id = m.id) AS "dayparts!: Json<Vec<String>>",
-                (SELECT json_group_array(ing.name) FROM meal_ingredients mi JOIN ingredients ing on mi.ingredient_id = ing.id WHERE mi.meal_id = m.id) AS "ingredients!: Json<Vec<String>>"
-            FROM meals m"#
-        )
-        .fetch_all(&self.pool)
-        .await
-        .map_err(anyhow::Error::from)?;
-
-        let meal_filter = MealFilter::parse(filter)?;
-
-        meals
-            .into_iter()
-            .filter(|meal| meal_filter.run(meal).unwrap_or(false))
-            .for_each(|meal| println!("{}", meal.name));
 
         Ok(())
     }

@@ -75,14 +75,7 @@ pub enum MealAction {
     },
     /// List all meals.
     #[command(aliases = ["ls", "l"])]
-    List {
-        #[arg(
-            short,
-            long,
-            help = "Filter meals using CEL syntax with id, name, dayparts, ingredients"
-        )]
-        filter: Option<String>,
-    },
+    List,
     /// Rename an existing meal.
     #[command(aliases = ["mv", "rn"])]
     Rename {
@@ -164,6 +157,12 @@ pub enum DaypartAction {
     #[command(aliases = ["rm", "delete", "del"])]
     Remove {
         /// Name of the daypart to remove.
+        name: String,
+    },
+    /// Display details of a specific daypart, e.g. which meals are assigned to it.
+    #[command(aliases = ["v", "show", "get"])]
+    View {
+        /// Name of the daypart to view.
         name: String,
     },
     /// List all dayparts.

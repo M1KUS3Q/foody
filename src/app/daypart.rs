@@ -19,6 +19,25 @@ impl App {
         Ok(())
     }
 
+    pub async fn view_daypart(&self, name: &str) -> anyhow::Result<()> {
+        let id = sqlx::query_scalar!("SELECT id FROM dayparts WHERE name = ?", name)
+            .fetch_one(&self.pool)
+            .await?;
+
+        let meals= sqlx::query_scalar!(
+            "SELECT m.name FROM meals m JOIN meal_dayparts md ON md.meal_id = m.id WHERE md.daypart_id = ?",
+            id
+        ).fetch_all(&self.pool).await?;
+
+        println!("Daypart: {name} (id: {id})");
+        println!("Meals:");
+        for meal in meals {
+            println!("- {meal}");
+        }
+
+        Ok(())
+    }
+
     pub async fn list_dayparts(&self) -> anyhow::Result<()> {
         sqlx::query_scalar!("SELECT name FROM dayparts")
             .fetch_all(&self.pool)
