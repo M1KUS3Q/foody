@@ -48,6 +48,12 @@ pub enum Category {
         /// The shell to generate the completions for
         shell: Shell,
     },
+
+    Upgrade {
+        /// Skip confirmation prompt.
+        #[arg(short, long)]
+        force: bool,
+    },
 }
 
 #[derive(Subcommand, Debug)]

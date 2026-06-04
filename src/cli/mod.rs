@@ -11,6 +11,7 @@ use crate::{
         model::{Category, Cli},
         plan::PlanRouter,
     },
+    utils::upgrade_binary,
 };
 
 pub mod daypart;
@@ -23,6 +24,10 @@ pub mod plan;
 impl Cli {
     pub async fn run(&self, app: &mut App) -> anyhow::Result<()> {
         match &self.command {
+            &Category::Upgrade { force } => {
+                tokio::task::spawn_blocking(move || upgrade_binary(force)).await??;
+                Ok(())
+            }
             Category::Completions { shell } => {
                 let mut cmd = Cli::command();
                 let bin_name = cmd.get_name().to_string();
