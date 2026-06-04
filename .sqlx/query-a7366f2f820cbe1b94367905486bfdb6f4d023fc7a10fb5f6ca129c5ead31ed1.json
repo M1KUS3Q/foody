@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT m.name \nFROM meals m\nJOIN meal_ingredients mi ON m.id = mi.meal_id\nJOIN ingredients i ON mi.ingredient_id = i.id\nWHERE i.name = ?;",
+  "describe": {
+    "columns": [
+      {
+        "name": "name",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "meals",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "a7366f2f820cbe1b94367905486bfdb6f4d023fc7a10fb5f6ca129c5ead31ed1"
+}

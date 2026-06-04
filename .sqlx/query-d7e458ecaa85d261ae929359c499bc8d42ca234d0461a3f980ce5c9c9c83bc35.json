@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO meal_plan_days (meal_plan_id, day_index) VALUES (?, ?) \n             ON CONFLICT(meal_plan_id, day_index) DO UPDATE SET meal_plan_id=meal_plan_id \n             RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "meal_plan_days",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "d7e458ecaa85d261ae929359c499bc8d42ca234d0461a3f980ce5c9c9c83bc35"
+}

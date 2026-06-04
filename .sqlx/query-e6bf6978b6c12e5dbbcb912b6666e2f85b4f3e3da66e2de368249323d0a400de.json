@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE meal_plans SET name = ? WHERE name = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "e6bf6978b6c12e5dbbcb912b6666e2f85b4f3e3da66e2de368249323d0a400de"
+}

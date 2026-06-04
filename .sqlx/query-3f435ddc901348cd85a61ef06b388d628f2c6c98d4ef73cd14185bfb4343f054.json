@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT name FROM ingredients",
+  "describe": {
+    "columns": [
+      {
+        "name": "name",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ingredients",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "3f435ddc901348cd85a61ef06b388d628f2c6c98d4ef73cd14185bfb4343f054"
+}

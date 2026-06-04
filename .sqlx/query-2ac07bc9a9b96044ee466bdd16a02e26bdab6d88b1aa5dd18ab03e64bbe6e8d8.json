@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO meal_plan_day_items (meal_plan_day_id, daypart_id, meal_id) VALUES (?, ?, ?) \n             ON CONFLICT(meal_plan_day_id, daypart_id) DO UPDATE SET meal_id=?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": []
+  },
+  "hash": "2ac07bc9a9b96044ee466bdd16a02e26bdab6d88b1aa5dd18ab03e64bbe6e8d8"
+}

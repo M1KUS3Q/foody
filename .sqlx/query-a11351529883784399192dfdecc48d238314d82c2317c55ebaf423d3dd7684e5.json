@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT OR IGNORE INTO meal_dayparts (meal_id, daypart_id) VALUES (?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "a11351529883784399192dfdecc48d238314d82c2317c55ebaf423d3dd7684e5"
+}

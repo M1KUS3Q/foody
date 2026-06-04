@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM dayparts WHERE name = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "4ab272b5f2ada3e2ea0d766ba3dca0b5c1f7536e9ea2600ca0b97136a2946fa3"
+}

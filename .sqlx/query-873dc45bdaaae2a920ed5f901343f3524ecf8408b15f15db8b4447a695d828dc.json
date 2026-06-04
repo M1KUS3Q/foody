@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT DISTINCT mp.name\nFROM meal_plans mp\nJOIN meal_plan_days mpd ON mp.id = mpd.meal_plan_id\nJOIN meal_plan_day_items mpdi ON mpd.id = mpdi.meal_plan_day_id\nJOIN meals m ON mpdi.meal_id = m.id\nWHERE m.name = ?;",
+  "describe": {
+    "columns": [
+      {
+        "name": "name",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "meal_plans",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "873dc45bdaaae2a920ed5f901343f3524ecf8408b15f15db8b4447a695d828dc"
+}

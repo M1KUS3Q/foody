@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO meal_plans(name) VALUES ($1)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "bd6d7c8ed344148d9766540c0beb46811316736ef3184815a1a424a490494a82"
+}

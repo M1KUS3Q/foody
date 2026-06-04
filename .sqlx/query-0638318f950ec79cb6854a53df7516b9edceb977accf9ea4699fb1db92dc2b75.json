@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT mpd.day_index, dp.name as daypart_name, m.name as meal_name\n             FROM meal_plan_days mpd\n             JOIN meal_plan_day_items mpdi ON mpd.id = mpdi.meal_plan_day_id\n             JOIN dayparts dp ON mpdi.daypart_id = dp.id\n             JOIN meals m ON mpdi.meal_id = m.id\n             WHERE mpd.meal_plan_id = ?\n             ORDER BY mpd.day_index, dp.id",
+  "describe": {
+    "columns": [
+      {
+        "name": "day_index",
+        "ordinal": 0,
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "meal_plan_days",
+            "name": "day_index"
+          }
+        }
+      },
+      {
+        "name": "daypart_name",
+        "ordinal": 1,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dayparts",
+            "name": "name"
+          }
+        }
+      },
+      {
+        "name": "meal_name",
+        "ordinal": 2,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "meals",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "0638318f950ec79cb6854a53df7516b9edceb977accf9ea4699fb1db92dc2b75"
+}

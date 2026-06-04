@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM meal_ingredients WHERE meal_id = ? AND ingredient_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "55d0b01e30693a381bccea173892161022ac19903d4f8b9ecbebc6a7366b9863"
+}

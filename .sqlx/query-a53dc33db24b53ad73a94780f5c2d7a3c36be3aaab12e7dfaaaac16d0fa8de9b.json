@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO meal_plan_day_items (meal_plan_day_id, daypart_id, meal_id) VALUES (?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "a53dc33db24b53ad73a94780f5c2d7a3c36be3aaab12e7dfaaaac16d0fa8de9b"
+}

@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO meal_plan_days (meal_plan_id, day_index) VALUES (?, ?) RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "meal_plan_days",
+            "name": "id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "bba2fae725233cf5c60e765206b86d6b3c1b965d50528a25ccaf44b59547f842"
+}

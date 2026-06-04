@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT meal_dayparts.meal_id FROM meal_dayparts\n                 WHERE meal_dayparts.daypart_id = ? ORDER BY RANDOM() LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "name": "meal_id",
+        "ordinal": 0,
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "meal_dayparts",
+            "name": "meal_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "e173d6b8ec1864b5cdbd6960ae7fd07ccc56ffd69288871b3b0ff372362ed1a5"
+}

@@ -1,0 +1,12 @@
+/target/
+**/*.rs.bk
+.DS_Store
+Cargo.lock.bk
+.env
+/sqlx-tmp/
+/.sqlite
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*_dump.sql

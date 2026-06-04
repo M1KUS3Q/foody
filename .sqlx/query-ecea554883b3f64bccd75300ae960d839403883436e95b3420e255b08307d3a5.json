@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT d.name FROM dayparts d JOIN meal_dayparts md ON md.daypart_id = d.id WHERE md.meal_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "name",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dayparts",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "ecea554883b3f64bccd75300ae960d839403883436e95b3420e255b08307d3a5"
+}

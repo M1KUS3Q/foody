@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM meal_dayparts WHERE meal_id = ? AND daypart_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "596ce3af21618a105e1567cc3c710e606c3adc6ace759e031b7409f84444afac"
+}
