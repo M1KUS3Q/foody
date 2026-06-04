@@ -14,13 +14,8 @@ cargo install --path .
 ```
 
 ## Setup
-
-Initialize the SQLite database with `sqlx`:
-```bash
-cargo install sqlx-cli
-sqlx database create
-sqlx migrate run
-```
+You can set a DATABASE_URL in the sqlite url format to direct the db to a specific location.
+The default is managed by the `directories` crate.
 
 ## Quick Start
 
