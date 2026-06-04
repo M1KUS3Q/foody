@@ -77,12 +77,12 @@ WHERE m.name = ?;",
         let dayparts = sqlx::query_scalar!(
             "SELECT d.name FROM dayparts d JOIN meal_dayparts md ON md.daypart_id = d.id WHERE md.meal_id = ?",
             id
-        ).fetch_all(&self.pool).await?.into();
+        ).fetch_all(&self.pool).await?;
 
         let ingredients = sqlx::query_scalar!(
             "SELECT ing.name FROM meal_ingredients mi JOIN ingredients ing on mi.ingredient_id = ing.id WHERE mi.meal_id = ?",
             id
-        ).fetch_all(&self.pool).await?.into();
+        ).fetch_all(&self.pool).await?;
 
         let view = MealView {
             id,
