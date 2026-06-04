@@ -3,7 +3,7 @@
 A CLI meal planning and grocery management tool written in Rust.
 
 ## Features
-Stated requirements can be found in (reqs.md)[reqs.md]
+Stated requirements can be found in [reqs.md](./reqs.md)
 
 ## Installation
 
