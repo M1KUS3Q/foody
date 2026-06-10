@@ -26,7 +26,10 @@ self_update = { version = "0.41.0", default-features = false, features = [
     "compression-zip-deflate",
     "rustls",
 ] }
-reqwest = { version = "0.13.4", features = ["json"] }
+reqwest = { version = "0.12", default-features = false, features = [
+    "rustls-tls-webpki-roots",
+    "json",
+] }
 
 [build-dependencies]
 dotenv = "0.15.0"
