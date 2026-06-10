@@ -3,6 +3,7 @@ pub mod grocery;
 pub mod ingredient;
 pub mod meal;
 pub mod plan;
+pub mod feedback;
 
 use sqlx::SqlitePool;
 

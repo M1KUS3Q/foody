@@ -49,10 +49,18 @@ pub enum Category {
         shell: Shell,
     },
 
+    /// Self-update foody to the latest version from GitHub releases.
     Upgrade {
         /// Skip confirmation prompt.
         #[arg(short, long)]
         force: bool,
+    },
+
+    /// Send feedback to the developer via a Discord webhook.
+    #[command(aliases = ["fb"])]
+    Feedback {
+        /// Feedback content to send to the developer.
+        content: String,
     },
 }
 

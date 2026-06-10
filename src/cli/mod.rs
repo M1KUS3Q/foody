@@ -39,6 +39,7 @@ impl Cli {
             Category::Daypart { action } => DaypartRouter::resolve(app, action).await,
             Category::Plan { action } => PlanRouter::resolve(app, action).await,
             Category::Grocery { action } => GroceryRouter::resolve(app, action).await,
+            Category::Feedback { content } => app.feedback(content).await,
         }
     }
 }

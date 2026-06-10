@@ -1,6 +1,6 @@
 [package]
 name = "foody"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [dependencies]
@@ -26,3 +26,7 @@ self_update = { version = "0.41.0", default-features = false, features = [
     "compression-zip-deflate",
     "rustls",
 ] }
+reqwest = { version = "0.13.4", features = ["json"] }
+
+[build-dependencies]
+dotenv = "0.15.0"

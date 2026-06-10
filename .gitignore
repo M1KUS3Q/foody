@@ -11,3 +11,4 @@ Cargo.lock.bk
 *.db-journal
 *_dump.sql
 .cargo/config.toml
+/releases/
