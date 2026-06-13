@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT i.name as ingredient_name, m.name as meal_name, c.name as category_name\n             FROM meals m\n             JOIN meal_ingredients mi ON m.id = mi.meal_id\n             JOIN ingredients i ON mi.ingredient_id = i.id\n             LEFT JOIN ingredient_categories ic ON i.id = ic.ingredient_id\n             LEFT JOIN categories c ON ic.category_id = c.id\n             WHERE m.id = ?\n             ORDER BY c.name ASC, i.name ASC",
+  "describe": {
+    "columns": [
+      {
+        "name": "ingredient_name",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "ingredients",
+            "name": "name"
+          }
+        }
+      },
+      {
+        "name": "meal_name",
+        "ordinal": 1,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "meals",
+            "name": "name"
+          }
+        }
+      },
+      {
+        "name": "category_name",
+        "ordinal": 2,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "categories",
+            "name": "name"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "27dc0539e49247615fea4312acc4a36d838bfa6802edf5400dfbd0aacb34eabe"
+}

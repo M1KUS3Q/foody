@@ -1,3 +1,4 @@
+pub mod category;
 pub mod daypart;
 pub mod grocery;
 pub mod ingredient;

@@ -4,11 +4,16 @@ pub struct IngredientView {
     id: i64,
     name: String,
     meals: Vec<String>,
+    categories: Vec<String>,
 }
 
 impl IngredientView {
     pub fn to_string_pretty(&self) -> String {
         let mut s = format!("{} (id {})\n", self.name, self.id);
+
+        if !self.categories.is_empty() {
+            s.push_str(&format!("Categories: {}\n", self.categories.join(", ")));
+        }
 
         if !self.meals.is_empty() {
             s.push_str("Used in meals:\n");
@@ -72,10 +77,16 @@ WHERE i.name = ?;",
             id
         ).fetch_all(&self.pool).await?;
 
+        let categories = sqlx::query_scalar!(
+            "SELECT c.name FROM categories c JOIN ingredient_categories ic ON ic.category_id = c.id WHERE ic.ingredient_id = ?",
+            id
+        ).fetch_all(&self.pool).await?;
+
         let view = IngredientView {
             id,
             name: name.into(),
             meals,
+            categories,
         };
 
         println!("{}", view.to_string_pretty());

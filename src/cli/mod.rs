@@ -4,6 +4,7 @@ use clap_complete::generate;
 use crate::{
     app::App,
     cli::{
+        category::CategoryRouter,
         daypart::DaypartRouter,
         grocery::GroceryRouter,
         ingredient::IngredientRouter,
@@ -14,6 +15,7 @@ use crate::{
     utils::upgrade_binary,
 };
 
+pub mod category;
 pub mod daypart;
 pub mod grocery;
 pub mod ingredient;
@@ -37,6 +39,7 @@ impl Cli {
             Category::Meal { action } => MealRouter::resolve(app, action).await,
             Category::Ingredient { action } => IngredientRouter::resolve(app, action).await,
             Category::Daypart { action } => DaypartRouter::resolve(app, action).await,
+            Category::GroceryCategory { action } => CategoryRouter::resolve(app, action).await,
             Category::Plan { action } => PlanRouter::resolve(app, action).await,
             Category::Grocery { action } => GroceryRouter::resolve(app, action).await,
             Category::Feedback { content } => app.feedback(content).await,

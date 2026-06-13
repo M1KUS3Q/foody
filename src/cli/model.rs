@@ -30,6 +30,12 @@ pub enum Category {
         #[command(subcommand)]
         action: DaypartAction,
     },
+    /// Manage grocery categories (dairy, produce, meat, etc.) and assign them to ingredients.
+    #[command(name = "category", aliases = ["cat", "c"])]
+    GroceryCategory {
+        #[command(subcommand)]
+        action: GroceryCategoryAction,
+    },
     /// Manage meal plans and assign meals to plan slots.
     #[command(alias = "p")]
     Plan {
@@ -201,6 +207,51 @@ pub enum DaypartAction {
         /// Comma-separated list of dayparts to remove.
         #[arg(value_delimiter = ',')]
         dayparts: Vec<String>,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum GroceryCategoryAction {
+    /// Create a new grocery category (e.g. dairy, produce, meat).
+    #[command(aliases = ["a", "new", "create"])]
+    Add {
+        /// Name of the category to create.
+        name: String,
+    },
+    /// Delete a category by name.
+    #[command(aliases = ["rm", "delete", "del"])]
+    Remove {
+        /// Name of the category to remove.
+        name: String,
+    },
+    /// Display details of a specific category, e.g. which ingredients belong to it.
+    #[command(aliases = ["v", "show", "get"])]
+    View {
+        /// Name of the category to view.
+        name: String,
+    },
+    /// List all categories.
+    #[command(aliases = ["ls", "l"])]
+    List,
+    /// Assign one or more categories to an ingredient.
+    ///
+    /// Example: foody category assign "Egg" dairy,produce
+    #[command(aliases = ["as", "attach", "link"])]
+    Assign {
+        /// Name of the target ingredient.
+        ingredientname: String,
+        /// Comma-separated list of categories to assign.
+        #[arg(value_delimiter = ',')]
+        categories: Vec<String>,
+    },
+    /// Remove one or more categories from an ingredient.
+    #[command(aliases = ["un", "detach", "unlink"])]
+    Unassign {
+        /// Name of the target ingredient.
+        ingredientname: String,
+        /// Comma-separated list of categories to remove.
+        #[arg(value_delimiter = ',')]
+        categories: Vec<String>,
     },
 }
 

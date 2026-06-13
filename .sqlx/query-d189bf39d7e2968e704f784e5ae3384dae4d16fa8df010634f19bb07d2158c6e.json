@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT OR IGNORE INTO ingredient_categories (ingredient_id, category_id) VALUES (?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "d189bf39d7e2968e704f784e5ae3384dae4d16fa8df010634f19bb07d2158c6e"
+}
