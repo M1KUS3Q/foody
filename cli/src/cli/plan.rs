@@ -1,4 +1,5 @@
-use crate::{app::App, cli::model::PlanAction};
+use foody_core::app::App;
+use crate::cli::model::PlanAction;
 
 pub struct PlanRouter;
 

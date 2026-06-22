@@ -1,0 +1,16 @@
+[package]
+name = "foody"
+version = "0.1.2"
+edition = "2024"
+
+[dependencies]
+foody-core = { path = "../core" }
+tokio = { version = "1.52.3", features = ["full"] }
+anyhow = "1.0.102"
+dotenv = "0.15.0"
+clap = { version = "4.6.1", features = ["derive", "wrap_help"] }
+clap_complete = "4.6.5"
+self_update = { version = "0.41.0", default-features = false, features = [
+    "archive-tar", "archive-zip", "compression-flate2",
+    "compression-zip-deflate", "rustls",
+] }

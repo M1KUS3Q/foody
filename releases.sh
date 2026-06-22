@@ -1,6 +1,6 @@
-export VERSION=$(cargo metadata --format-version 1 --no-deps | jq -r '.packages[0].version')
+export VERSION=$(cargo metadata --format-version 1 --no-deps | jq -r '[.packages[] | select(.name == "foody")][0].version')
 
-cargo b --release && cargo b --release --target aarch64-linux-android
+cargo b --release -p foody && cargo b --release -p foody --target aarch64-linux-android
 mkdir -p releases
 tar -czf releases/foody-v$VERSION-aarch64-linux-android.tar.gz -C target/aarch64-linux-android/release foody
 tar -czf releases/foody-v$VERSION-aarch64-apple-darwin.tar.gz -C target/release foody

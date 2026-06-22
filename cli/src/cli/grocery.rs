@@ -1,4 +1,5 @@
-use crate::{app::App, cli::model::GroceryAction};
+use foody_core::app::App;
+use crate::cli::model::GroceryAction;
 
 pub struct GroceryRouter;
 

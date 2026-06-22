@@ -1,35 +1,3 @@
-[package]
-name = "foody"
-version = "0.1.2"
-edition = "2024"
-
-[dependencies]
-sqlx = { version = "0.9.0", default-features = false, features = [
-    "runtime-tokio",
-    "sqlite",
-    "macros",
-    "migrate",
-] }
-tokio = { version = "1.52.3", features = ["full"] }
-serde = "1.0.228"
-serde_json = "1.0.150"
-anyhow = "1.0.102"
-dotenv = "0.15.0"
-rand = "0.10.1"
-clap = { version = "4.6.1", features = ["derive", "wrap_help"] }
-clap_complete = "4.6.5"
-directories = "6.0.0"
-self_update = { version = "0.41.0", default-features = false, features = [
-    "archive-tar",
-    "archive-zip",
-    "compression-flate2",
-    "compression-zip-deflate",
-    "rustls",
-] }
-reqwest = { version = "0.12", default-features = false, features = [
-    "rustls-tls-webpki-roots",
-    "json",
-] }
-
-[build-dependencies]
-dotenv = "0.15.0"
+[workspace]
+resolver = "2"
+members = ["core", "cli"]

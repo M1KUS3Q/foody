@@ -1,8 +1,8 @@
 use clap::CommandFactory;
 use clap_complete::generate;
 
+use foody_core::app::App;
 use crate::{
-    app::App,
     cli::{
         category::CategoryRouter,
         daypart::DaypartRouter,
@@ -13,7 +13,7 @@ use crate::{
         plan::PlanRouter,
         recipe::RecipeRouter,
     },
-    utils::upgrade_binary,
+    upgrade::upgrade_binary,
 };
 
 pub mod category;

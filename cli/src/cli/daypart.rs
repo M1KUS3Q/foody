@@ -1,4 +1,5 @@
-use crate::{app::App, cli::model::DaypartAction};
+use foody_core::app::App;
+use crate::cli::model::DaypartAction;
 
 pub struct DaypartRouter;
 

@@ -1,14 +1,12 @@
 pub mod app;
-pub mod cli;
 pub mod utils;
 
 use std::{env, fs, path::PathBuf, str::FromStr};
 
-use clap::Parser;
 use directories::ProjectDirs;
 use sqlx::{SqlitePool, sqlite::SqliteConnectOptions};
 
-use crate::{app::App, cli::model::Cli};
+use app::App;
 
 async fn get_db_path() -> anyhow::Result<PathBuf> {
     // 1. Allow DEV override via env var
@@ -40,11 +38,7 @@ async fn connect(url: &str) -> anyhow::Result<SqlitePool> {
         .map_err(anyhow::Error::from)
 }
 
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    // Load .env only in development, ignore failures in release
-    let _ = dotenv::dotenv();
-
+pub async fn setup_db() -> anyhow::Result<App> {
     let db_path = get_db_path().await?;
     let db_url = format!("sqlite://{}", db_path.display());
 
@@ -54,7 +48,5 @@ async fn main() -> anyhow::Result<()> {
     // Migrations are embedded in the binary at compile time
     sqlx::migrate!("./migrations").run(&pool).await?;
 
-    let mut app = App::new(pool);
-    let cli = Cli::parse();
-    cli.run(&mut app).await
+    Ok(App::new(pool))
 }

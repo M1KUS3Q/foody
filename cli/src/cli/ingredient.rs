@@ -1,4 +1,5 @@
-use crate::{app::App, cli::model::IngredientAction};
+use foody_core::app::App;
+use crate::cli::model::IngredientAction;
 
 pub struct IngredientRouter;
 
