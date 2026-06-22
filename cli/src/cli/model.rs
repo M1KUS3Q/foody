@@ -6,12 +6,12 @@ use clap_complete::Shell;
 #[command(name = "foody", author, version, about, long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Category,
+    pub command: CliCommandCategory,
 }
 
 /// Top-level resource categories.
 #[derive(Subcommand, Debug)]
-pub enum Category {
+pub enum CliCommandCategory {
     /// Manage meals (add, remove, view, list, rename).
     #[command(alias = "m")]
     Meal {

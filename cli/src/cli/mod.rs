@@ -1,7 +1,6 @@
 use clap::CommandFactory;
 use clap_complete::generate;
 
-use foody_core::app::App;
 use crate::{
     cli::{
         category::CategoryRouter,
@@ -9,12 +8,13 @@ use crate::{
         grocery::GroceryRouter,
         ingredient::IngredientRouter,
         meal::MealRouter,
-        model::{Category, Cli},
+        model::{Cli, CliCommandCategory},
         plan::PlanRouter,
         recipe::RecipeRouter,
     },
     upgrade::upgrade_binary,
 };
+use foody_core::app::App;
 
 pub mod category;
 pub mod daypart;
@@ -28,24 +28,28 @@ pub mod recipe;
 impl Cli {
     pub async fn run(&self, app: &mut App) -> anyhow::Result<()> {
         match &self.command {
-            &Category::Upgrade { force } => {
+            &CliCommandCategory::Upgrade { force } => {
                 tokio::task::spawn_blocking(move || upgrade_binary(force)).await??;
                 Ok(())
             }
-            Category::Completions { shell } => {
+            CliCommandCategory::Completions { shell } => {
                 let mut cmd = Cli::command();
                 let bin_name = cmd.get_name().to_string();
                 generate(*shell, &mut cmd, bin_name, &mut std::io::stdout());
                 Ok(())
             }
-            Category::Meal { action } => MealRouter::resolve(app, action).await,
-            Category::Ingredient { action } => IngredientRouter::resolve(app, action).await,
-            Category::Daypart { action } => DaypartRouter::resolve(app, action).await,
-            Category::GroceryCategory { action } => CategoryRouter::resolve(app, action).await,
-            Category::Plan { action } => PlanRouter::resolve(app, action).await,
-            Category::Grocery { action } => GroceryRouter::resolve(app, action).await,
-            Category::Feedback { content } => app.feedback(content).await,
-            Category::Recipe { action } => RecipeRouter::resolve(app, action).await,
+            CliCommandCategory::Meal { action } => MealRouter::resolve(app, action).await,
+            CliCommandCategory::Ingredient { action } => {
+                IngredientRouter::resolve(app, action).await
+            }
+            CliCommandCategory::Daypart { action } => DaypartRouter::resolve(app, action).await,
+            CliCommandCategory::GroceryCategory { action } => {
+                CategoryRouter::resolve(app, action).await
+            }
+            CliCommandCategory::Plan { action } => PlanRouter::resolve(app, action).await,
+            CliCommandCategory::Grocery { action } => GroceryRouter::resolve(app, action).await,
+            CliCommandCategory::Feedback { content } => app.feedback(content).await,
+            CliCommandCategory::Recipe { action } => RecipeRouter::resolve(app, action).await,
         }
     }
 }
