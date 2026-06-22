@@ -5,6 +5,7 @@ pub struct MealView {
     name: String,
     dayparts: Vec<String>,
     ingredients: Vec<String>,
+    recipe: Option<String>,
 }
 
 impl MealView {
@@ -20,6 +21,10 @@ impl MealView {
             for ing in &self.ingredients {
                 s.push_str(&format!("- {}\n", ing));
             }
+        }
+
+        if let Some(recipe) = &self.recipe {
+            s.push_str(&format!("\nRecipe:\n{recipe}\n"));
         }
 
         s
@@ -84,11 +89,16 @@ WHERE m.name = ?;",
             id
         ).fetch_all(&self.pool).await?;
 
+        let recipe = sqlx::query_scalar!("SELECT recipe FROM meals WHERE id = ?", id)
+            .fetch_one(&self.pool)
+            .await?;
+
         let view = MealView {
             id,
             name: name.into(),
             dayparts,
             ingredients,
+            recipe,
         };
 
         println!("{}", view.to_string_pretty());

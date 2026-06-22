@@ -68,6 +68,37 @@ pub enum Category {
         /// Feedback content to send to the developer.
         content: String,
     },
+
+    /// Manage recipe text for meals (set, view, remove).
+    #[command(alias = "r")]
+    Recipe {
+        #[command(subcommand)]
+        action: RecipeAction,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum RecipeAction {
+    /// Set or update the recipe for a meal.
+    #[command(aliases = ["s", "a", "add"])]
+    Set {
+        /// Name of the meal.
+        name: String,
+        /// Recipe text.
+        recipe: String,
+    },
+    /// View the recipe for a meal.
+    #[command(aliases = ["v", "show", "get"])]
+    View {
+        /// Name of the meal.
+        name: String,
+    },
+    /// Remove the recipe from a meal.
+    #[command(aliases = ["rm", "delete", "del"])]
+    Remove {
+        /// Name of the meal.
+        name: String,
+    },
 }
 
 #[derive(Subcommand, Debug)]

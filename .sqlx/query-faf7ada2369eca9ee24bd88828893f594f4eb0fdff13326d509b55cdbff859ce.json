@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT recipe FROM meals WHERE name = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "recipe",
+        "ordinal": 0,
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "meals",
+            "name": "recipe"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "faf7ada2369eca9ee24bd88828893f594f4eb0fdff13326d509b55cdbff859ce"
+}

@@ -11,6 +11,7 @@ use crate::{
         meal::MealRouter,
         model::{Category, Cli},
         plan::PlanRouter,
+        recipe::RecipeRouter,
     },
     utils::upgrade_binary,
 };
@@ -22,6 +23,7 @@ pub mod ingredient;
 pub mod meal;
 pub mod model;
 pub mod plan;
+pub mod recipe;
 
 impl Cli {
     pub async fn run(&self, app: &mut App) -> anyhow::Result<()> {
@@ -43,6 +45,7 @@ impl Cli {
             Category::Plan { action } => PlanRouter::resolve(app, action).await,
             Category::Grocery { action } => GroceryRouter::resolve(app, action).await,
             Category::Feedback { content } => app.feedback(content).await,
+            Category::Recipe { action } => RecipeRouter::resolve(app, action).await,
         }
     }
 }

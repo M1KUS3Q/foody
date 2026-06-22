@@ -1,10 +1,11 @@
 pub mod category;
 pub mod daypart;
+pub mod feedback;
 pub mod grocery;
 pub mod ingredient;
 pub mod meal;
 pub mod plan;
-pub mod feedback;
+pub mod recipe;
 
 use sqlx::SqlitePool;
 
