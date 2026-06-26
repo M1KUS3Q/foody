@@ -1,10 +1,13 @@
+use serde::Serialize;
+
 use crate::app::App;
 
+#[derive(Serialize)]
 pub struct IngredientView {
-    id: i64,
-    name: String,
-    meals: Vec<String>,
-    categories: Vec<String>,
+    pub id: i64,
+    pub name: String,
+    pub meals: Vec<String>,
+    pub categories: Vec<String>,
 }
 
 impl IngredientView {
@@ -39,7 +42,7 @@ impl App {
     pub async fn remove_ingredient(&self, name: &str, force: bool) -> anyhow::Result<()> {
         if !force {
             let used_by_meals = sqlx::query_scalar!(
-                "SELECT m.name 
+                "SELECT m.name
 FROM meals m
 JOIN meal_ingredients mi ON m.id = mi.meal_id
 JOIN ingredients i ON mi.ingredient_id = i.id
@@ -67,7 +70,7 @@ WHERE i.name = ?;",
         Ok(())
     }
 
-    pub async fn view_ingredient(&self, name: &str) -> anyhow::Result<()> {
+    pub async fn view_ingredient(&self, name: &str) -> anyhow::Result<IngredientView> {
         let id = sqlx::query_scalar!("SELECT id FROM ingredients WHERE name = ?", name)
             .fetch_one(&self.pool)
             .await?;
@@ -82,27 +85,19 @@ WHERE i.name = ?;",
             id
         ).fetch_all(&self.pool).await?;
 
-        let view = IngredientView {
+        Ok(IngredientView {
             id,
             name: name.into(),
             meals,
             categories,
-        };
-
-        println!("{}", view.to_string_pretty());
-
-        Ok(())
+        })
     }
 
-    pub async fn list_ingredients(&self) -> anyhow::Result<()> {
+    pub async fn list_ingredients(&self) -> anyhow::Result<Vec<String>> {
         sqlx::query_scalar!("SELECT name FROM ingredients")
             .fetch_all(&self.pool)
             .await
-            .map_err(anyhow::Error::from)?
-            .iter()
-            .for_each(|name| println!("{name}"));
-
-        Ok(())
+            .map_err(anyhow::Error::from)
     }
 
     pub async fn rename_ingredient(&self, name: &str, new_name: &str) -> anyhow::Result<()> {

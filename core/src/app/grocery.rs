@@ -1,10 +1,9 @@
-use crate::app::App;
 use std::collections::BTreeMap;
-use std::fs;
-use std::io::Write;
+
+use crate::app::App;
 
 impl App {
-    pub async fn grocery_plan(&self, name: &str, export: &Option<String>) -> anyhow::Result<()> {
+    pub async fn grocery_plan(&self, name: &str) -> anyhow::Result<String> {
         let plan_id = sqlx::query_scalar!("SELECT id FROM meal_plans WHERE name = ?", name)
             .fetch_one(&self.pool)
             .await?;
@@ -58,11 +57,10 @@ impl App {
             }
         }
 
-        self.handle_grocery_output(output, export)?;
-        Ok(())
+        Ok(output)
     }
 
-    pub async fn grocery_meal(&self, name: &str, export: &Option<String>) -> anyhow::Result<()> {
+    pub async fn grocery_meal(&self, name: &str) -> anyhow::Result<String> {
         let meal_id = sqlx::query_scalar!("SELECT id FROM meals WHERE name = ?", name)
             .fetch_one(&self.pool)
             .await?;
@@ -102,18 +100,6 @@ impl App {
             }
         }
 
-        self.handle_grocery_output(output, export)?;
-        Ok(())
-    }
-
-    fn handle_grocery_output(&self, output: String, export: &Option<String>) -> anyhow::Result<()> {
-        if let Some(path) = export {
-            let mut file = fs::File::create(path)?;
-            file.write_all(output.as_bytes())?;
-            println!("Exported grocery list to {}", path);
-        } else {
-            print!("{}", output);
-        }
-        Ok(())
+        Ok(output)
     }
 }

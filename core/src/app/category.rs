@@ -1,4 +1,24 @@
+use serde::Serialize;
+
 use crate::app::App;
+
+#[derive(Serialize)]
+pub struct CategoryView {
+    pub id: i64,
+    pub name: String,
+    pub ingredients: Vec<String>,
+}
+
+impl CategoryView {
+    pub fn to_string_pretty(&self) -> String {
+        let mut s = format!("Category: {} (id: {})\n", self.name, self.id);
+        s.push_str("Ingredients:\n");
+        for ingredient in &self.ingredients {
+            s.push_str(&format!("- {}\n", ingredient));
+        }
+        s
+    }
+}
 
 impl App {
     pub async fn add_category(&self, name: &str) -> anyhow::Result<()> {
@@ -19,7 +39,7 @@ impl App {
         Ok(())
     }
 
-    pub async fn view_category(&self, name: &str) -> anyhow::Result<()> {
+    pub async fn view_category(&self, name: &str) -> anyhow::Result<CategoryView> {
         let id = sqlx::query_scalar!("SELECT id FROM categories WHERE name = ?", name)
             .fetch_one(&self.pool)
             .await?;
@@ -27,26 +47,22 @@ impl App {
         let ingredients = sqlx::query_scalar!(
             "SELECT i.name FROM ingredients i JOIN ingredient_categories ic ON ic.ingredient_id = i.id WHERE ic.category_id = ?",
             id
-        ).fetch_all(&self.pool).await?;
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
-        println!("Category: {name} (id: {id})");
-        println!("Ingredients:");
-        for ingredient in ingredients {
-            println!("- {ingredient}");
-        }
-
-        Ok(())
+        Ok(CategoryView {
+            id,
+            name: name.into(),
+            ingredients,
+        })
     }
 
-    pub async fn list_categories(&self) -> anyhow::Result<()> {
+    pub async fn list_categories(&self) -> anyhow::Result<Vec<String>> {
         sqlx::query_scalar!("SELECT name FROM categories")
             .fetch_all(&self.pool)
             .await
-            .map_err(anyhow::Error::from)?
-            .iter()
-            .for_each(|name| println!("{name}"));
-
-        Ok(())
+            .map_err(anyhow::Error::from)
     }
 
     pub async fn assign_categories(

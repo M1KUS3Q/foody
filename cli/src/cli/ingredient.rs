@@ -8,8 +8,18 @@ impl IngredientRouter {
         match action {
             IngredientAction::Add { name } => app.add_ingredient(name).await,
             IngredientAction::Remove { force, name } => app.remove_ingredient(name, *force).await,
-            IngredientAction::View { name } => app.view_ingredient(name).await,
-            IngredientAction::List => app.list_ingredients().await,
+            IngredientAction::View { name } => {
+                let view = app.view_ingredient(name).await?;
+                println!("{}", view.to_string_pretty());
+                Ok(())
+            }
+            IngredientAction::List => {
+                let ingredients = app.list_ingredients().await?;
+                for name in ingredients {
+                    println!("{name}");
+                }
+                Ok(())
+            }
             IngredientAction::Rename { name, new_name } => {
                 app.rename_ingredient(name, new_name).await
             }

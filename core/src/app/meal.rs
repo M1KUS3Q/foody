@@ -1,11 +1,14 @@
+use serde::Serialize;
+
 use crate::app::App;
 
+#[derive(Serialize)]
 pub struct MealView {
-    id: i64,
-    name: String,
-    dayparts: Vec<String>,
-    ingredients: Vec<String>,
-    recipe: Option<String>,
+    pub id: i64,
+    pub name: String,
+    pub dayparts: Vec<String>,
+    pub ingredients: Vec<String>,
+    pub recipe: Option<String>,
 }
 
 impl MealView {
@@ -74,7 +77,7 @@ WHERE m.name = ?;",
         Ok(())
     }
 
-    pub async fn view_meal(&self, name: &str) -> anyhow::Result<()> {
+    pub async fn view_meal(&self, name: &str) -> anyhow::Result<MealView> {
         let id = sqlx::query_scalar!("SELECT m.id FROM meals m WHERE m.name = ?", name)
             .fetch_one(&self.pool)
             .await?;
@@ -93,28 +96,20 @@ WHERE m.name = ?;",
             .fetch_one(&self.pool)
             .await?;
 
-        let view = MealView {
+        Ok(MealView {
             id,
             name: name.into(),
             dayparts,
             ingredients,
             recipe,
-        };
-
-        println!("{}", view.to_string_pretty());
-
-        Ok(())
+        })
     }
 
-    pub async fn list_meals(&self) -> anyhow::Result<()> {
+    pub async fn list_meals(&self) -> anyhow::Result<Vec<String>> {
         sqlx::query_scalar!("SELECT name FROM meals")
             .fetch_all(&self.pool)
             .await
-            .map_err(anyhow::Error::from)?
-            .iter()
-            .for_each(|name| println!("{name}"));
-
-        Ok(())
+            .map_err(anyhow::Error::from)
     }
 
     pub async fn rename_meal(&self, name: &str, new_name: &str) -> anyhow::Result<()> {

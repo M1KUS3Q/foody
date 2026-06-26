@@ -8,8 +8,18 @@ impl DaypartRouter {
         match action {
             DaypartAction::Add { name } => app.add_daypart(name).await,
             DaypartAction::Remove { name } => app.remove_daypart(name).await,
-            DaypartAction::View { name } => app.view_daypart(name).await,
-            DaypartAction::List => app.list_dayparts().await,
+            DaypartAction::View { name } => {
+                let view = app.view_daypart(name).await?;
+                println!("{}", view.to_string_pretty());
+                Ok(())
+            }
+            DaypartAction::List => {
+                let dayparts = app.list_dayparts().await?;
+                for name in dayparts {
+                    println!("{name}");
+                }
+                Ok(())
+            }
             DaypartAction::Assign { mealname, dayparts } => {
                 app.assign_dayparts(mealname, dayparts).await
             }

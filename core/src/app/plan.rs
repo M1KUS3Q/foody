@@ -1,4 +1,33 @@
+use serde::Serialize;
+
 use crate::app::App;
+
+#[derive(Serialize, sqlx::FromRow)]
+pub struct PlanItem {
+    pub day_index: i64,
+    pub daypart_name: String,
+    pub meal_name: String,
+}
+
+#[derive(Serialize)]
+pub struct PlanView {
+    pub id: i64,
+    pub name: String,
+    pub items: Vec<PlanItem>,
+}
+
+impl PlanView {
+    pub fn to_string_pretty(&self) -> String {
+        let mut s = format!("{} (id {})\n", self.name, self.id);
+        for item in &self.items {
+            s.push_str(&format!(
+                "  Day {}: {} - {}\n",
+                item.day_index, item.daypart_name, item.meal_name
+            ));
+        }
+        s
+    }
+}
 
 impl App {
     pub async fn add_plan(&self, name: &str) -> anyhow::Result<()> {
@@ -19,19 +48,10 @@ impl App {
         Ok(())
     }
 
-    pub async fn view_plan(&self, name: &str) -> anyhow::Result<()> {
+    pub async fn view_plan(&self, name: &str) -> anyhow::Result<PlanView> {
         let id = sqlx::query_scalar!("SELECT id FROM meal_plans WHERE name = ?", name)
             .fetch_one(&self.pool)
             .await?;
-
-        println!("{} (id {})", name, id);
-
-        #[derive(sqlx::FromRow)]
-        struct PlanItem {
-            day_index: i64,
-            daypart_name: String,
-            meal_name: String,
-        }
 
         let items = sqlx::query_as!(
             PlanItem,
@@ -47,25 +67,18 @@ impl App {
         .fetch_all(&self.pool)
         .await?;
 
-        for item in items {
-            println!(
-                "  Day {}: {} - {}",
-                item.day_index, item.daypart_name, item.meal_name
-            );
-        }
-
-        Ok(())
+        Ok(PlanView {
+            id,
+            name: name.into(),
+            items,
+        })
     }
 
-    pub async fn list_plans(&self) -> anyhow::Result<()> {
+    pub async fn list_plans(&self) -> anyhow::Result<Vec<String>> {
         sqlx::query_scalar!("SELECT name FROM meal_plans")
             .fetch_all(&self.pool)
             .await
-            .map_err(anyhow::Error::from)?
-            .iter()
-            .for_each(|name| println!("{name}"));
-
-        Ok(())
+            .map_err(anyhow::Error::from)
     }
 
     pub async fn rename_plan(&self, name: &str, new_name: &str) -> anyhow::Result<()> {
@@ -97,8 +110,8 @@ impl App {
         // ON CONFLICT(meal_plan_id, day_index) requires returning the ID.
         // `query_scalar!` with returning id works in recent SQLite/sqlx
         let day_id = sqlx::query_scalar!(
-            "INSERT INTO meal_plan_days (meal_plan_id, day_index) VALUES (?, ?) 
-             ON CONFLICT(meal_plan_id, day_index) DO UPDATE SET meal_plan_id=meal_plan_id 
+            "INSERT INTO meal_plan_days (meal_plan_id, day_index) VALUES (?, ?)
+             ON CONFLICT(meal_plan_id, day_index) DO UPDATE SET meal_plan_id=meal_plan_id
              RETURNING id",
             plan_id,
             day_index
@@ -106,16 +119,17 @@ impl App {
         .fetch_one(&self.pool)
         .await?;
 
-        let daypart_id = sqlx::query_scalar!("SELECT id FROM dayparts WHERE name = ?", daypartname)
-            .fetch_one(&self.pool)
-            .await?;
+        let daypart_id =
+            sqlx::query_scalar!("SELECT id FROM dayparts WHERE name = ?", daypartname)
+                .fetch_one(&self.pool)
+                .await?;
 
         let meal_id = sqlx::query_scalar!("SELECT id FROM meals WHERE name = ?", mealname)
             .fetch_one(&self.pool)
             .await?;
 
         sqlx::query!(
-            "INSERT INTO meal_plan_day_items (meal_plan_day_id, daypart_id, meal_id) VALUES (?, ?, ?) 
+            "INSERT INTO meal_plan_day_items (meal_plan_day_id, daypart_id, meal_id) VALUES (?, ?, ?)
              ON CONFLICT(meal_plan_day_id, daypart_id) DO UPDATE SET meal_id=?",
             day_id,
             daypart_id,
@@ -140,9 +154,10 @@ impl App {
 
         let day_index: i64 = indexname.parse()?;
 
-        let daypart_id = sqlx::query_scalar!("SELECT id FROM dayparts WHERE name = ?", daypartname)
-            .fetch_one(&self.pool)
-            .await?;
+        let daypart_id =
+            sqlx::query_scalar!("SELECT id FROM dayparts WHERE name = ?", daypartname)
+                .fetch_one(&self.pool)
+                .await?;
 
         let day_id = sqlx::query_scalar!(
             "SELECT id FROM meal_plan_days WHERE meal_plan_id = ? AND day_index = ?",
@@ -201,7 +216,9 @@ impl App {
                     day_id,
                     dp.id,
                     meal_id
-                ).execute(&self.pool).await?;
+                )
+                .execute(&self.pool)
+                .await?;
             }
         }
 

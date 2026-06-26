@@ -1,5 +1,5 @@
-use foody_core::app::App;
 use crate::cli::model::GroceryCategoryAction;
+use foody_core::app::App;
 
 pub struct CategoryRouter;
 
@@ -8,8 +8,18 @@ impl CategoryRouter {
         match action {
             GroceryCategoryAction::Add { name } => app.add_category(name).await,
             GroceryCategoryAction::Remove { name } => app.remove_category(name).await,
-            GroceryCategoryAction::View { name } => app.view_category(name).await,
-            GroceryCategoryAction::List => app.list_categories().await,
+            GroceryCategoryAction::View { name } => {
+                let view = app.view_category(name).await?;
+                println!("{}", view.to_string_pretty());
+                Ok(())
+            }
+            GroceryCategoryAction::List => {
+                let categories = app.list_categories().await?;
+                for name in categories {
+                    println!("{name}");
+                }
+                Ok(())
+            }
             GroceryCategoryAction::Assign {
                 ingredientname,
                 categories,

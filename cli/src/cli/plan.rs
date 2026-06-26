@@ -8,8 +8,18 @@ impl PlanRouter {
         match action {
             PlanAction::Add { name } => app.add_plan(name).await,
             PlanAction::Remove { name } => app.remove_plan(name).await,
-            PlanAction::View { name } => app.view_plan(name).await,
-            PlanAction::List => app.list_plans().await,
+            PlanAction::View { name } => {
+                let view = app.view_plan(name).await?;
+                println!("{}", view.to_string_pretty());
+                Ok(())
+            }
+            PlanAction::List => {
+                let plans = app.list_plans().await?;
+                for name in plans {
+                    println!("{name}");
+                }
+                Ok(())
+            }
             PlanAction::Rename { name, new_name } => app.rename_plan(name, new_name).await,
             PlanAction::Assign {
                 planname,
