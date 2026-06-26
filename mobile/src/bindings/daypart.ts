@@ -3,34 +3,38 @@ import type { DaypartView } from "./types";
 
 export const daypart = {
   async add(name: string): Promise<void> {
-    await invoke("daypart", { action: "Add", name });
+    await invoke("daypart", { command: { action: "Add", name } });
   },
 
   async remove(name: string): Promise<void> {
-    await invoke("daypart", { action: "Remove", name });
+    await invoke("daypart", { command: { action: "Remove", name } });
   },
 
   async view(name: string): Promise<DaypartView> {
-    return await invoke("daypart", { action: "View", name });
+    return await invoke("daypart", { command: { action: "View", name } });
   },
 
   async list(): Promise<string[]> {
-    return await invoke("daypart", { action: "List" });
+    return await invoke("daypart", { command: { action: "List" } });
   },
 
   async assign(mealName: string, dayparts: string[]): Promise<void> {
     await invoke("daypart", {
-      action: "Assign",
-      mealname: mealName,
-      dayparts,
+      command: {
+        action: "Assign",
+        mealname: mealName,
+        dayparts,
+      },
     });
   },
 
   async unassign(mealName: string, dayparts: string[]): Promise<void> {
     await invoke("daypart", {
-      action: "Unassign",
-      mealname: mealName,
-      dayparts,
+      command: {
+        action: "Unassign",
+        mealname: mealName,
+        dayparts,
+      },
     });
   },
 };

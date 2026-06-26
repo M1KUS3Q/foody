@@ -3,23 +3,23 @@ import type { PlanView } from "./types";
 
 export const plan = {
   async add(name: string): Promise<void> {
-    await invoke("plan", { action: "Add", name });
+    await invoke("plan", { command: { action: "Add", name } });
   },
 
   async remove(name: string): Promise<void> {
-    await invoke("plan", { action: "Remove", name });
+    await invoke("plan", { command: { action: "Remove", name } });
   },
 
   async view(name: string): Promise<PlanView> {
-    return await invoke("plan", { action: "View", name });
+    return await invoke("plan", { command: { action: "View", name } });
   },
 
   async list(): Promise<string[]> {
-    return await invoke("plan", { action: "List" });
+    return await invoke("plan", { command: { action: "List" } });
   },
 
   async rename(name: string, newName: string): Promise<void> {
-    await invoke("plan", { action: "Rename", name, new_name: newName });
+    await invoke("plan", { command: { action: "Rename", name, new_name: newName } });
   },
 
   async assign(
@@ -29,11 +29,13 @@ export const plan = {
     mealName: string,
   ): Promise<void> {
     await invoke("plan", {
-      action: "Assign",
-      planname: planName,
-      indexname: indexName,
-      daypartname: daypartName,
-      mealname: mealName,
+      command: {
+        action: "Assign",
+        planname: planName,
+        indexname: indexName,
+        daypartname: daypartName,
+        mealname: mealName,
+      },
     });
   },
 
@@ -43,14 +45,16 @@ export const plan = {
     daypartName: string,
   ): Promise<void> {
     await invoke("plan", {
-      action: "Unassign",
-      planname: planName,
-      indexname: indexName,
-      daypartname: daypartName,
+      command: {
+        action: "Unassign",
+        planname: planName,
+        indexname: indexName,
+        daypartname: daypartName,
+      },
     });
   },
 
   async fill(planName: string, days: number = 7): Promise<void> {
-    await invoke("plan", { action: "Fill", planname: planName, days });
+    await invoke("plan", { command: { action: "Fill", planname: planName, days } });
   },
 };
