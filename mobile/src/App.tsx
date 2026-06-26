@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { foody } from "./bindings";
 import "./App.css";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
     setStatus(null);
 
     try {
-      await invoke("add_meal", { name });
+      await foody.meal.add(name);
       setStatus({ type: "ok", msg: `Added "${name}"!` });
       setMealName("");
     } catch (e) {
