@@ -1,60 +1,34 @@
 import { useState } from "react";
-import { foody } from "./bindings";
-import "./App.css";
+import { BottomNav, type NavId } from "@/components/BottomNav";
+import { HomeScreen } from "@/screens/HomeScreen";
+import { RecipesScreen } from "@/screens/RecipesScreen";
+import { MealPlanScreen } from "@/screens/MealPlanScreen";
+import { PantryScreen } from "@/screens/PantryScreen";
+import { GroceriesScreen } from "@/screens/GroceriesScreen";
 
-function App() {
-  const [mealName, setMealName] = useState("");
-  const [status, setStatus] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  async function addMeal() {
-    const name = mealName.trim();
-    if (!name) return;
-
-    setLoading(true);
-    setStatus(null);
-
-    try {
-      await foody.meal.add(name);
-      setStatus({ type: "ok", msg: `Added "${name}"!` });
-      setMealName("");
-    } catch (e) {
-      setStatus({ type: "err", msg: String(e) });
-    } finally {
-      setLoading(false);
-    }
-  }
+export default function App() {
+  const [activeNav, setActiveNav] = useState<NavId>("home");
 
   return (
-    <main className="container">
-      <h1>Foody</h1>
+    <div
+      className="flex flex-col w-full overflow-hidden"
+      style={{
+        height: "100dvh",
+        background: "#e5e5e5",
+      }}
+    >
+      {/* Screen area — fills all space above bottom nav */}
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ minHeight: 0 }}>
+        {activeNav === "home" && (
+          <HomeScreen setNav={setActiveNav} />
+        )}
+        {activeNav === "recipes" && <RecipesScreen />}
+        {activeNav === "mealplan" && <MealPlanScreen />}
+        {activeNav === "pantry" && <PantryScreen />}
+        {activeNav === "groceries" && <GroceriesScreen />}
+      </div>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          addMeal();
-        }}
-      >
-        <input
-          id="meal-input"
-          value={mealName}
-          onChange={(e) => setMealName(e.currentTarget.value)}
-          placeholder="What did you eat?"
-          disabled={loading}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving…" : "Add Meal"}
-        </button>
-      </form>
-
-      {status && (
-        <p className={status.type === "err" ? "error" : "success"}>
-          {status.msg}
-        </p>
-      )}
-    </main>
+      <BottomNav active={activeNav} onChange={setActiveNav} />
+    </div>
   );
 }
-
-export default App;
